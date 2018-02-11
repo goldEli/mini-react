@@ -2,9 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 // import App from '../App';
 
-it('renders without crashing', () => {
+it('ReactDOM.render', () => {
   const div = document.createElement('div');
-  // ReactDOM.render(<App />, div);
+  ReactDOM.render(
+    <div className="level1">
+        <div className="level2">
+            123
+        </div>
+    </div>
+  , div);
   // ReactDOM.unmountComponentAtNode(div);
 
 });
