@@ -44,7 +44,13 @@
     * 渲染component
     * setstate
 * state改变，update后，jsx引擎调用createElement，但是没有调用ReactDOM.render
-* 看样子 重头来过了
+
+* 重头来过
+* 思路
+  * ReactDOM.render(dom, root)
+  * jsx 解析 dom
+  * 调取 createElement(type, config, children) 返回 Vnode
+  * 创建instantiateReactComponent工厂函数，根据 type，调用 ReactDOMTextComponent，ReactDomComponent，ReactCompositeComponent  
 
 
 ### 参考
