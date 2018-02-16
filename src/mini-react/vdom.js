@@ -10,11 +10,23 @@ const mountDom = (Vnode, container) => {
     mapProps(el, props) 
         
     children.forEach(function (child) {
-        let childEl = _.isString(child)
-            ? mountText(child, el)
-            : mountDom(child, el)
+        let childEl;
+        if (_.isString(child)) {
+            childEl = mountText(child, el)
+        }
+        if (_.has(child, 'type') && _.isFunction(child['type'])) {
+            childEl = mountComponent(child, el)
+        }
+        if (_.has(child, 'type') && _.isString(child['type'])) {
+            childEl = mountDom(child, el)
+        }
 
-        container.appendChild(childEl)
+        if (childEl) {
+            container.appendChild(childEl)
+        } else {
+            console.error('生成childEl失败：',child)
+        }
+        
     })
     
     return container
@@ -31,8 +43,13 @@ const mountComponent = (Vnode, container) => {
         , Component = type
         , instance = new Component(props)
         , VnodeFromComponent = instance.render()
-
-    return renderToRealDom(VnodeFromComponent, container)    
+    let domNode;    
+    if (_.isString(VnodeFromComponent.type)) {
+        domNode = document.createElement(VnodeFromComponent.type)
+        mountDom(VnodeFromComponent, domNode)
+    }
+    container.appendChild(domNode)
+    return container;  
 }
 
 const renderToRealDom = (Vnode, container) => {
