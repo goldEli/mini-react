@@ -12,5 +12,4 @@ it('ReactDOM.render', () => {
     </div>
   , div);
   // ReactDOM.unmountComponentAtNode(div);
-
 });

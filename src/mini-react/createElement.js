@@ -18,5 +18,6 @@ export const createElement = (type, config, ...children) => {
         if (key === '__self' || key === '__source') continue
         props[key] = config[key]
     }
+    // 
     return new Vnode({props,children,type})
 }
