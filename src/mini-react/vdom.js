@@ -1,8 +1,11 @@
 import {log} from './Utils';
 import _ from 'underscore';
 import mapProps from './mapProps';
+import {Com} from './component';
 
-const mountDom = (Vnode, container) => {
+let allComponent = []
+
+const mountDom = (Vnode) => {
     
     const {children, type, props} = Vnode
         , el = document.createElement(type)
@@ -12,24 +15,22 @@ const mountDom = (Vnode, container) => {
     children.forEach(function (child) {
         let childEl;
         if (_.isString(child)) {
-            childEl = mountText(child, el)
+            mountText(child, el)
         }
         if (_.has(child, 'type') && _.isFunction(child['type'])) {
-            childEl = mountComponent(child, el)
+            mountComponent(child, el)
         }
         if (_.has(child, 'type') && _.isString(child['type'])) {
             childEl = mountDom(child, el)
         }
 
         if (childEl) {
-            container.appendChild(childEl)
-        } else {
-            console.error('生成childEl失败：',child)
-        }
+            el.appendChild(childEl)
+        } 
         
     })
     
-    return container
+    return el
 }
 
 const mountText = (text, container) => {
@@ -42,33 +43,53 @@ const mountComponent = (Vnode, container) => {
     const {props, type} = Vnode
         , Component = type
         , instance = new Component(props)
-        , VnodeFromComponent = instance.render()
+        , renderedVonde = instance.render()
+    allComponent.push(instance) 
+    instance.renderedVonde = renderedVonde
+    instance._hostNode = container
     let domNode;    
-    if (_.isString(VnodeFromComponent.type)) {
-        domNode = document.createElement(VnodeFromComponent.type)
-        mountDom(VnodeFromComponent, domNode)
-    }
-    container.appendChild(domNode)
-    return container;  
+    instance.lifeCycle = Com.MOUNTTING
+    domNode = mountDom(renderedVonde)
+    instance.oldNode = domNode
+    container.appendChild(domNode)  
 }
 
-const renderToRealDom = (Vnode, container) => {
+const renderToRealDom = (Vnode, container, isUpdata, oldNode) => {
     const {type, props, children} = Vnode        
 
     let domNode;
     if (_.isString(type)) {
-        domNode = document.createElement(type)
-        mountDom(Vnode, domNode)
+        domNode = mountDom(Vnode)
     }
     if (_.isFunction(type)) {
-        debugger
-        // domNode = mountComponent(child, el)
-        // container.appendChild(el)
-        // Vnode._hostNode = dom //缓存真实节点
+        mountComponent(Vnode, container)
+        log('第一次渲染生成的虚拟dom',Vnode)
     }
-    mapProps(domNode, props)
-    container.appendChild(domNode)
-    return domNode
+
+    
+    
+    log('第一次渲染生成的虚拟dom',Vnode)
+    
+    if (isUpdata) {
+        // container.innerHTML = ""
+        container.replaceChild(domNode,oldNode)
+        allComponent.forEach((e,i)=>{
+            e.componentDidUpdate()
+        })
+    } else {
+        container.appendChild(domNode)
+        allComponent.forEach((e,i)=>{
+            e.componentDidMount()
+        })
+    }
+    
+    allComponent = []
+    log('allComponent',allComponent)
+
+}
+
+export const update = (oldVnode, newVnode, _hostNode, oldNode) => {
+    renderToRealDom(newVnode, _hostNode, true, oldNode)
 }
 
 export const render = (Vnode, container) => {

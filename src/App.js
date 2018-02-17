@@ -1,17 +1,30 @@
 import React from './mini-react/index';
 
+// import React from 'luy';
+// import React from 'react';
+
+import AppChild from './AppChild';
+
 class App extends React.Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      data: 'oldState'
+    }
+  }
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+      <div className="App" id="app">
+        <h1>这是React组件App</h1>
+        <h2>{"这里展示state"+this.state.data}</h2>
+        <AppChild/>
       </div>
     );
+  }
+  componentDidMount(){
+    this.setState({
+      data:'newState'
+    })
   }
 }
 
