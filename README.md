@@ -54,7 +54,8 @@
 * 初次渲染完成
     * setState更新state
 * ()()    
-* 不知道react组件什么时候渲染到真实dom上的？？？？？？
+* 不知道react组件什么时候渲染到真实dom上的？
+* 当挂载到真实dom上后，统一调用componentDidMount？
 
 ### 参考
 

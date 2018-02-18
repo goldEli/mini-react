@@ -16,23 +16,26 @@ export default class Component{
         this.props = props
     }
     setState(partialNewState, cb) {
-        this.state = Object.assign({}, this.state, partialNewState);
-        this.updateComponent();
+        this.pendingDidMountMethods.push(partialNewState)
+        if (this.lifeCycle == Com.MOUNTED) {
+            this.updateComponent();
+        }
     }
     updateComponent() {
 
+        this.pendingDidMountMethods.forEach((e,i) => {
+            this.state = Object.assign({},this.state,e)
+        });
+
         const newVnode = this.render()
             , oldVnode = this.renderedVonde
-            , oldNode = this.oldNode
-        update(oldVnode, newVnode, this._hostNode, oldNode)
+            , oldNode = this.oldNode;    
+        
+        update(oldVnode, newVnode, this._hostNode, oldNode, this)
+
+        this.pendingDidMountMethods = []
     }
-    updateLifeCycle() {
-        if (this.lifeCycle = Com.MOUNTED && this.pendingDidMountMethods.length > 0) {
-            this.pendingDidMountMethods.forEach((e,i) => {
-                e()
-            });
-        }
-    }
+ 
     render() { }
     // shouldComponentUpdate() { }
     componentWillReceiveProps() { }

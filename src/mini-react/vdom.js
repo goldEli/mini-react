@@ -3,15 +3,13 @@ import _ from 'underscore';
 import mapProps from './mapProps';
 import {Com} from './component';
 
-let allComponent = []
+let allComponent = [];
 
-const mountDom = (Vnode) => {
+function mountDom(Vnode){
     
     const {children, type, props} = Vnode
         , el = document.createElement(type)
-
     mapProps(el, props) 
-        
     children.forEach(function (child) {
         let childEl;
         if (_.isString(child)) {
@@ -33,13 +31,13 @@ const mountDom = (Vnode) => {
     return el
 }
 
-const mountText = (text, container) => {
+function mountText(text, container){
     const textNode = document.createTextNode(text)
     container.appendChild(textNode)
     return container
 }
 
-const mountComponent = (Vnode, container) => {
+function mountComponent(Vnode, container){
     const {props, type} = Vnode
         , Component = type
         , instance = new Component(props)
@@ -49,12 +47,15 @@ const mountComponent = (Vnode, container) => {
     instance._hostNode = container
     let domNode;    
     instance.lifeCycle = Com.MOUNTTING
+    instance.componentWillMount()
     domNode = mountDom(renderedVonde)
     instance.oldNode = domNode
     container.appendChild(domNode)  
 }
 
-const renderToRealDom = (Vnode, container, isUpdata, oldNode) => {
+
+
+function renderToRealDom (Vnode, container, isUpdata, oldNode, ReactComponent){
     const {type, props, children} = Vnode        
 
     let domNode;
@@ -66,30 +67,39 @@ const renderToRealDom = (Vnode, container, isUpdata, oldNode) => {
         log('第一次渲染生成的虚拟dom',Vnode)
     }
 
-    
-    
     log('第一次渲染生成的虚拟dom',Vnode)
     
     if (isUpdata) {
-        // container.innerHTML = ""
         container.replaceChild(domNode,oldNode)
+        ReactComponent.oldNode = domNode
+        updateLifeCycle(allComponent,Com.MOUNTED)
         allComponent.forEach((e,i)=>{
             e.componentDidUpdate()
         })
     } else {
         container.appendChild(domNode)
+        updateLifeCycle(allComponent,Com.MOUNTED)
         allComponent.forEach((e,i)=>{
             e.componentDidMount()
         })
     }
     
     allComponent = []
+    
     log('allComponent',allComponent)
 
 }
 
-export const update = (oldVnode, newVnode, _hostNode, oldNode) => {
-    renderToRealDom(newVnode, _hostNode, true, oldNode)
+function updateLifeCycle(allComponent, lifeCycle) {
+    if(allComponent.length>0) {
+        allComponent.forEach((e,i) => {
+            e.lifeCycle = lifeCycle
+        });
+    }
+}
+
+export const update = (oldVnode, newVnode, _hostNode, oldNode, ReactComponent) => {
+    renderToRealDom(newVnode, _hostNode, true, oldNode, ReactComponent)
 }
 
 export const render = (Vnode, container) => {

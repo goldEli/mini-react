@@ -12,12 +12,19 @@ class App extends React.Component {
       data: 'oldState'
     }
   }
+  componentWillMount(){
+    setTimeout(()=>{
+      this.setState({
+        data:'123'
+      })
+    },500)
+  }
   render() {
     return (
       <div className="App" id="app">
         <h1>这是React组件App</h1>
         <h2>{"这里展示state"+this.state.data}</h2>
-        <AppChild/>
+        <AppChild data = "来自APP的数据"/>
       </div>
     );
   }

@@ -7,12 +7,13 @@ class AppChild extends React.Component {
   render() {
     return (
       <div className="AppChild" id="AppChild">
-        <h4>这是React组件AppChild</h4>
+        <h4>这是React组件AppChild，是APP的儿子</h4>
+        <h4>{this.props.data}</h4>
       </div>
     );
   }
   componentDidMount(){
-    
+
   }
 }
 
