@@ -13,9 +13,9 @@
 - [x] 渲染html
 - [x] 渲染react组件    
 - [x] props, style, otherProps    
-- [ ] 生命周期
-- [ ] setState
-- [ ] 事件
+- [x] 生命周期
+- [x] setState
+- [ ] 事件委托
 - [ ] diff
 
 （.....）
@@ -54,8 +54,7 @@
 * 初次渲染完成
     * setState更新state
 * ()()    
-* 不知道react组件什么时候渲染到真实dom上的？
-* 当挂载到真实dom上后，统一调用componentDidMount？
+* 不知道react组件什么时候渲染到真实dom上的？当挂载到真实dom上后，统一调用componentDidMount？
 
 ### 参考
 
@@ -66,3 +65,5 @@
 * [a tiny react-like library](https://github.com/ahonn/tiny-react)
 * [setInnerHTML.js](https://github.com/facebook/react/blob/b1768b5a48d1f82e4ef4150e0036c5f846d3758a/src/renderers/dom/shared/setInnerHTML.js)
 * [React 源码剖析系列 － 生命周期的管理艺术](https://zhuanlan.zhihu.com/purerender/20312691)
+* [React 源码剖析系列 － 不可思议的 react diff](https://zhuanlan.zhihu.com/p/20346379)
+* [构建一个使用 Virtual-DOM 的前端模版引擎](https://github.com/livoras/blog/issues/14)
