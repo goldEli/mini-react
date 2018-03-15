@@ -62,8 +62,8 @@
     * 没有 key，判断类型是否相同，不同则替换节点，相同则对比 props
     * 有 key 的情况下，用列表对比算法  
     
-* 流程图
-![Alt text](https://github.com/Shucaiping/mini-react/raw/master/imgs/r_process.png)
+### 流程图
+![react 运行流程图](https://github.com/Shucaiping/mini-react/raw/master/imgs/r_process.png)
 ### 参考
 
 * [Luy 1.0 ：一个React-like轮子的诞生](https://zhuanlan.zhihu.com/p/30073543)
