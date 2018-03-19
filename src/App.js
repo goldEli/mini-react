@@ -23,8 +23,11 @@ class App extends React.Component {
     return (
       <div className="App" id="app">
         <h1>这是React组件App</h1>
+        {/*
         <h2>{"这里展示state"+this.state.data}</h2>
+        */}
         <AppChild data = "来自APP的数据"/>
+        
       </div>
     );
   }
