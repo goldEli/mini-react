@@ -3,11 +3,24 @@ import _ from 'underscore';
 import mapProps from './mapProps';
 import {Com} from './component';
 import {instantiateReactComponent} from './instantiateReactComponent';
+import {getAllReactNode} from './host';
 
-function renderToRealDom (Vnode, container, isUpdata, oldNode, ReactComponent){
+function renderToRealDom (Vnode, container, isUpdata, oldNode, ReactNode){
     Vnode.container = container;
-    const node = instantiateReactComponent(Vnode)        
-    container.appendChild(node)        
+    const node = instantiateReactComponent(Vnode, container)  
+    if (!isUpdata) {
+        container.appendChild(node)        
+        const allReactNode = getAllReactNode()
+        allReactNode.forEach(e=>{
+            if (e.lifeCycle === Com.MOUNTTING) {
+                e.lifeCycle = Com.MOUNTED
+                if (e.componentDidMount) {e.componentDidMount()}
+            }
+        })
+    } else {
+        container.replaceChild(node,oldNode)
+        ReactNode.oldNode = node        
+    }     
     
     // let domNode;
     // if (_.isString(type)) {
@@ -49,8 +62,8 @@ function renderToRealDom (Vnode, container, isUpdata, oldNode, ReactComponent){
 //     }
 // }
 
-export const update = (oldVnode, newVnode, _hostNode, oldNode, ReactComponent) => {
-    renderToRealDom(newVnode, _hostNode, true, oldNode, ReactComponent)
+export const update = (oldVnode, newVnode, container, oldNode, ReactNode) => {
+    renderToRealDom(newVnode, container, true, oldNode, ReactNode)
 }
 
 export const render = (Vnode, container) => {

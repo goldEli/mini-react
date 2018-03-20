@@ -15,17 +15,15 @@ class App extends React.Component {
   componentWillMount(){
     setTimeout(()=>{
       this.setState({
-        data:'123'
+        data:'comefromWill'
       })
-    },500)
+    },5000)
   }
   render() {
     return (
       <div className="App" id="app">
         <h1>这是React组件App</h1>
-        {/*
         <h2>{"这里展示state"+this.state.data}</h2>
-        */}
         <AppChild data = "来自APP的数据"/>
         
       </div>
@@ -33,7 +31,7 @@ class App extends React.Component {
   }
   componentDidMount(){
     this.setState({
-      data:'newState'
+      data:'comefromDid'
     })
   }
 }

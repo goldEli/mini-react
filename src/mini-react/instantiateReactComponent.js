@@ -5,7 +5,7 @@ import {
   , reactCompositeComponent
 } from './host';
 
-export function instantiateReactComponent(Vnode) {
+export function instantiateReactComponent(Vnode, container) {
     let node = null
 
     if (typeof Vnode === 'string' || typeof Vnode === 'number') {
@@ -17,7 +17,7 @@ export function instantiateReactComponent(Vnode) {
       if (typeof type === 'string') {
         node = reactDomComponent(Vnode)
       } else if (typeof type === 'function') {
-        node = reactCompositeComponent(Vnode)
+        node = reactCompositeComponent(Vnode,container)
       }
     }
     return node
